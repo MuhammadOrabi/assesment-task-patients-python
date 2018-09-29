@@ -1,0 +1,8 @@
+Flask
+flask_sqlalchemy
+psycopg2-binary 
+flask-migrate
+flask-script 
+marshmallow
+flask-bcrypt
+pyjwt
