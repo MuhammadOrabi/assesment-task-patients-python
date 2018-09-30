@@ -61,6 +61,10 @@ class PatientModel(db.Model):
     def get_patient_by_id(id):
         return PatientModel.query.get(id)
     
+    @staticmethod
+    def get_patient_by_username(value):
+        return PatientModel.query.filter_by(username=value).first()
+    
     def __repr(self):
         return '<id {}>'.format(self.id)
 

@@ -41,7 +41,7 @@ class Auth():
         re = {'data': {}, 'error': {}}
         try:
             payload = jwt.decode(token, os.getenv('SECRET'))
-            re['data'] = {'user_id': payload['sub']}
+            re['data'] = {'patient_id': payload['sub']}
             return re
         except jwt.ExpiredSignatureError as e1:
             re['error'] = {'message': 'token expired, please login again'}
@@ -75,7 +75,7 @@ class Auth():
                 )
         
             patient_id = data['data']['patient_id']
-            check_patient = PatientModel.get_one_patient(patient_id)
+            check_patient = PatientModel.get_patient_by_id(patient_id)
             if not check_patient:
                 return Response(
                     mimetype="application/json",

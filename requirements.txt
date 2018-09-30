@@ -6,3 +6,5 @@ flask-script
 marshmallow
 flask-bcrypt
 pyjwt
+pytest-cov 
+pytest
