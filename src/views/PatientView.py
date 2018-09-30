@@ -1,6 +1,6 @@
 #/src/views/PatientView
 
-from flask import request, json, Response, Blueprint
+from flask import request, json, Response, Blueprint, g
 from ..models.PatientModel import PatientModel, PatientSchema
 from ..shared.Authentication import Auth
 
@@ -35,7 +35,6 @@ def create():
     return custom_response({'jwt_token': token}, 201)
 
 @patient_api.route('/', methods=['GET'])
-@Auth.auth_required
 def get_all():
     patients = PatientModel.get_all_patients()
     ser_patients = patient_schema.dump(patients, many=True).data
@@ -74,7 +73,7 @@ def get_a_patient(patient_id):
     """
     Get a single patient
     """
-    patient = PatientModel.get_one_patient(patient_id)
+    patient = PatientModel.get_patient_by_id(patient_id)
     if not patient:
         return custom_response({'error': 'patient not found'}, 404)
     
@@ -88,11 +87,11 @@ def update():
     Update me
     """
     req_data = request.get_json()
-    data, error = user_schema.load(req_data, partial=True)
+    data, error = patient_schema.load(req_data, partial=True)
     if error:
         return custom_response(error, 400)
 
-    patient = PatientModel.get_one_patient(g.patient.get('id'))
+    patient = PatientModel.get_patient_by_id(g.patient.get('id'))
     patient.update(data)
     ser_patient = patient_schema.dump(patient).data
     return custom_response(ser_patient, 200)
@@ -103,7 +102,7 @@ def delete():
     """
     Delete a patient
     """
-    patient = PatientModel.get_one_patient(g.patient.get('id'))
+    patient = PatientModel.get_patient_by_id(g.patient.get('id'))
     patient.delete()
     return custom_response({'message': 'deleted'}, 204)
 
@@ -113,7 +112,7 @@ def get_me():
     """
     Get me
     """
-    patient = PatientModel.get_one_patient(g.patient.get('id'))
+    patient = PatientModel.get_patient_by_id(g.patient.get('id'))
     ser_patient = patient_schema.dump(patient).data
     return custom_response(ser_patient, 200)
 

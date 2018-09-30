@@ -21,9 +21,19 @@ class Production(object):
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URI')
     JWT_SECRET_KEY = os.getenv('SECRET')
 
+class Testing(object):
+    """
+    Development environment configuration
+    """
+    TESTING = True
+    JWT_SECRET_KEY = os.getenv('SECRET')
+    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_TEST_URL')
+    SQLALCHEMY_TRACK_MODIFICATIONS=False
+
 app_config = {
     'development': Development,
     'production': Production,
+    'testing': Testing
 }
 
 
