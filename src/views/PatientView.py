@@ -8,7 +8,7 @@ from ..shared.Authentication import Auth
 patient_api = Blueprint('patients', __name__)
 patient_schema = PatientSchema()
 
-@patient_api.route('/', methods=['POST'])
+@patient_api.route('/register', methods=['POST'])
 def create():
     """
     Create Patient Function
