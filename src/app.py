@@ -17,9 +17,9 @@ def create_app(env_name):
 
     # app initiliazation
     app = Flask(__name__)
+    CORS(app)
     app.config.from_object(app_config[env_name])
 
-    CORS(app)
 
     # initializing bcrypt
     bcrypt.init_app(app)
@@ -27,6 +27,7 @@ def create_app(env_name):
     db.init_app(app)
 
     app.register_blueprint(patient_blueprint, url_prefix='/api/patients')
+    
 
     @app.route('/', methods=['GET'])
     def index():
