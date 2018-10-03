@@ -8,6 +8,7 @@ from .models import db, bcrypt
 
 from .views.PatientView import patient_api as patient_blueprint
 
+from flask_cors import CORS
 
 def create_app(env_name):
     """
@@ -17,6 +18,8 @@ def create_app(env_name):
     # app initiliazation
     app = Flask(__name__)
     app.config.from_object(app_config[env_name])
+
+    CORS(app)
 
     # initializing bcrypt
     bcrypt.init_app(app)

@@ -8,7 +8,7 @@ from ..shared.Authentication import Auth
 patient_api = Blueprint('patients', __name__)
 patient_schema = PatientSchema()
 
-@patient_api.route('/', methods=['POST'])
+@patient_api.route('/register', methods=['POST'])
 def create():
     """
     Create Patient Function
@@ -32,7 +32,7 @@ def create():
 
     token = Auth.generate_token(ser_data.get('id'))
 
-    return custom_response({'jwt_token': token}, 201)
+    return custom_response({'jwt_token': token, 'id': ser_data.get('id')}, 201)
 
 @patient_api.route('/', methods=['GET'])
 def get_all():
@@ -65,7 +65,7 @@ def login():
     
     token = Auth.generate_token(ser_data.get('id'))
 
-    return custom_response({'jwt_token': token}, 200)
+    return custom_response({'jwt_token': token, 'id': ser_data.get('id')}, 200)
 
 @patient_api.route('/<int:patient_id>', methods=['GET'])
 @Auth.auth_required
