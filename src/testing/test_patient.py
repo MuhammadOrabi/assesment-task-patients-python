@@ -26,16 +26,16 @@ class PatientsTest(unittest.TestCase):
 
     def test_patient_creation(self):
         """ test patient creation with valid credentials """
-        res = self.client().post('/api/patients/', headers={'Content-Type': 'application/json'}, data=json.dumps(self.patient))
+        res = self.client().post('/api/patients/register', headers={'Content-Type': 'application/json'}, data=json.dumps(self.patient))
         json_data = json.loads(res.data)
         self.assertTrue(json_data.get('jwt_token'))
         self.assertEqual(res.status_code, 201)
 
     def test_patient_creation_with_existing_username(self):
         """ test patient creation with already existing username"""
-        res = self.client().post('/api/patients/', headers={'Content-Type': 'application/json'}, data=json.dumps(self.patient))
+        res = self.client().post('/api/patients/register', headers={'Content-Type': 'application/json'}, data=json.dumps(self.patient))
         self.assertEqual(res.status_code, 201)
-        res = self.client().post('/api/patients/', headers={'Content-Type': 'application/json'}, data=json.dumps(self.patient))
+        res = self.client().post('/api/patients/register', headers={'Content-Type': 'application/json'}, data=json.dumps(self.patient))
         json_data = json.loads(res.data)
         self.assertEqual(res.status_code, 400)
         self.assertTrue(json_data.get('error'))
@@ -46,7 +46,7 @@ class PatientsTest(unittest.TestCase):
             'name': 'olawale',
             'username': 'olawale1mailcom',
         }
-        res = self.client().post('/api/patients/', headers={'Content-Type': 'application/json'}, data=json.dumps(patient1))
+        res = self.client().post('/api/patients/register', headers={'Content-Type': 'application/json'}, data=json.dumps(patient1))
         json_data = json.loads(res.data)
         self.assertEqual(res.status_code, 400)
         self.assertTrue(json_data.get('password'))
@@ -57,7 +57,7 @@ class PatientsTest(unittest.TestCase):
             'name': 'olawale',
             'pasword': 'olawale1@mail.com',
         }
-        res = self.client().post('/api/patients/', headers={'Content-Type': 'application/json'}, data=json.dumps(patient1))
+        res = self.client().post('/api/patients/register', headers={'Content-Type': 'application/json'}, data=json.dumps(patient1))
         json_data = json.loads(res.data)
         self.assertEqual(res.status_code, 400)
         self.assertTrue(json_data.get('username'))
@@ -65,13 +65,13 @@ class PatientsTest(unittest.TestCase):
     def test_patient_creation_with_empty_request(self):
         """ test patient creation with empty request """
         patient1 = {}
-        res = self.client().post('/api/patients/', headers={'Content-Type': 'application/json'}, data=json.dumps(patient1))
+        res = self.client().post('/api/patients/register', headers={'Content-Type': 'application/json'}, data=json.dumps(patient1))
         json_data = json.loads(res.data)
         self.assertEqual(res.status_code, 400)
 
     def test_patient_login(self):
         """ Patient Login Tests """
-        res = self.client().post('/api/patients/', headers={'Content-Type': 'application/json'}, data=json.dumps(self.patient))
+        res = self.client().post('/api/patients/register', headers={'Content-Type': 'application/json'}, data=json.dumps(self.patient))
         self.assertEqual(res.status_code, 201)
         res = self.client().post('/api/patients/login', headers={'Content-Type': 'application/json'}, data=json.dumps(self.patient))
         json_data = json.loads(res.data)
@@ -84,7 +84,7 @@ class PatientsTest(unittest.TestCase):
             'password': 'olawale',
             'username': 'olawalemailcom',
         }
-        res = self.client().post('/api/patients/', headers={'Content-Type': 'application/json'}, data=json.dumps(self.patient))
+        res = self.client().post('/api/patients/register', headers={'Content-Type': 'application/json'}, data=json.dumps(self.patient))
         self.assertEqual(res.status_code, 201)
         res = self.client().post('/api/patients/login', headers={'Content-Type': 'application/json'}, data=json.dumps(patient1))
         json_data = json.loads(res.data)
@@ -98,7 +98,7 @@ class PatientsTest(unittest.TestCase):
             'password': 'passw0rd!',
             'username': 'olawale1111mailcom',
         }
-        res = self.client().post('/api/patients/', headers={'Content-Type': 'application/json'}, data=json.dumps(self.patient))
+        res = self.client().post('/api/patients/register', headers={'Content-Type': 'application/json'}, data=json.dumps(self.patient))
         self.assertEqual(res.status_code, 201)
         res = self.client().post('/api/patients/login', headers={'Content-Type': 'application/json'}, data=json.dumps(patient1))
         json_data = json.loads(res.data)
@@ -108,7 +108,7 @@ class PatientsTest(unittest.TestCase):
 
     def test_patient_get_me(self):
         """ Test Patient Get Me """
-        res = self.client().post('/api/patients/', headers={'Content-Type': 'application/json'}, data=json.dumps(self.patient))
+        res = self.client().post('/api/patients/register', headers={'Content-Type': 'application/json'}, data=json.dumps(self.patient))
         self.assertEqual(res.status_code, 201)
         api_token = json.loads(res.data).get('jwt_token')
         res = self.client().get('/api/patients/me', headers={'Content-Type': 'application/json', 'api-token': api_token})
@@ -122,7 +122,7 @@ class PatientsTest(unittest.TestCase):
         patient1 = {
         'name': 'new name'
         }
-        res = self.client().post('/api/patients/', headers={'Content-Type': 'application/json'}, data=json.dumps(self.patient))
+        res = self.client().post('/api/patients/register', headers={'Content-Type': 'application/json'}, data=json.dumps(self.patient))
         self.assertEqual(res.status_code, 201)
         api_token = json.loads(res.data).get('jwt_token')
         res = self.client().put('/api/patients/me', headers={'Content-Type': 'application/json', 'api-token': api_token}, data=json.dumps(patient1))
@@ -132,7 +132,7 @@ class PatientsTest(unittest.TestCase):
 
     def test_delete_patient(self):
         """ Test Patinet Delete """
-        res = self.client().post('/api/patients/', headers={'Content-Type': 'application/json'}, data=json.dumps(self.patient))
+        res = self.client().post('/api/patients/register', headers={'Content-Type': 'application/json'}, data=json.dumps(self.patient))
         self.assertEqual(res.status_code, 201)
         api_token = json.loads(res.data).get('jwt_token')
         res = self.client().delete('/api/patients/me', headers={'Content-Type': 'application/json', 'api-token': api_token})
