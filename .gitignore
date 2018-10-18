@@ -32,3 +32,4 @@ src/__pycache__
 data/
 migrations
 .pytest_cache
+.vscode
