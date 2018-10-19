@@ -1,0 +1,40 @@
+---
+test_name: Make sure jwt returned has the expected aud value
+    
+includes:
+    - !include common.yaml
+    
+stages:
+    - &register_request
+        name: register
+        request:
+            url: "{service.proto:s}://{service.host:s}:{service.port:d}/api/patients/register"
+            json:
+                username: test-user236
+                password: correct-password
+                name: user
+            method: POST
+            headers:
+                content-type: application/json
+        response:
+            status_code: 201
+            body:
+                $ext: &verify_token
+                    function: tavern.testutils.helpers:validate_jwt
+                    extra_kwargs:
+                        jwt_key: "jwt_token"
+                        key: "{keys.secret:s}"
+                        options:
+                            verify_signature: true
+                            verify_aud: false
+                            verify_exp: true
+                            require_sub: true
+                            algorithms: 'HS256'
+            headers:
+                content-type: application/json
+            save:
+                $ext:
+                    <<: *verify_token
+                body:
+                    test_login_token: jwt_token
+---

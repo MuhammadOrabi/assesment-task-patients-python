@@ -1,0 +1,11 @@
+---
+name: test includes
+description: used for testing against local server
+
+variables:
+    service:
+        proto: http
+        host: localhost
+        port: 5000
+    keys:
+        secret: NPH2xmMIKI78gsIZ/BPCCpy6u6MnLbFhT4Oj1S/zky0=
