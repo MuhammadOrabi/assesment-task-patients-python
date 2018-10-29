@@ -12,3 +12,5 @@ pytest
 gunicorn
 tavern
 colorlog
+pika
+celery

@@ -1,8 +1,9 @@
 #src/app.py
-
 from flask import Flask
 
 from .config import app_config
+
+from .events import run_all
 
 from .models import db, bcrypt
 
@@ -28,6 +29,7 @@ def create_app(env_name):
 
     app.register_blueprint(patient_blueprint, url_prefix='/api/patients')
     
+    run_all()
 
     @app.route('/', methods=['GET'])
     def index():
@@ -35,5 +37,7 @@ def create_app(env_name):
         example endpoint
         """
         return 'Congratulations! Your first endpoint is workin'
+
+    
 
     return app
